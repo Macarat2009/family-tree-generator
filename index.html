@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Tree Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">Family<span>Tree</span></a>
+    <span class="version">verze 0.1</span>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <p class="eyebrow">RODINNÁ HISTORIE</p>
+      <h1>Vytvoř si svůj<br><span>rodokmen.</span></h1>
+      <p class="intro-text">Vyplň informace o sobě a svých předcích. O zbytek se postará generátor.</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">KROK 01</p>
+          <h2>Členové rodiny</h2>
+        </div>
+        <span class="counter">4 GENERACE · 15 OSOB</span>
+      </div>
+      <p class="hint">Nevíš-li některý údaj, nech pole prázdné. Rodokmen se vygeneruje i bez něj.</p>
+      <form id="family-form">
+        <div id="people-form" class="people-grid"></div>
+        <div class="actions">
+          <button class="primary-button" type="submit">Vygenerovat rodokmen <span>↗</span></button>
+          <button class="secondary-button" type="reset" id="reset-button">Vymazat formulář</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel preview-panel">
+      <div class="section-heading preview-heading">
+        <div>
+          <p class="eyebrow">KROK 02</p>
+          <h2>Náhled rodokmenu</h2>
+        </div>
+        <div class="view-controls" aria-label="Orientace rodokmenu">
+          <button class="view-button active" type="button" data-layout="vertical" aria-pressed="true">Vertikálně</button>
+          <button class="view-button" type="button" data-layout="horizontal" aria-pressed="false">Horizontálně</button>
+        </div>
+      </div>
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">⌘</div>
+        <strong>Tvůj rodokmen se objeví tady</strong>
+        <span>Nejdřív vyplň údaje a klikni na „Vygenerovat rodokmen“.</span>
+      </div>
+      <div id="tree-container" class="tree-container hidden">
+        <div id="tree-canvas" class="tree-canvas"></div>
+      </div>
+      <div class="export-row">
+        <span id="tree-status" class="tree-status">Zatím nebyl vytvořen žádný rodokmen.</span>
+        <button id="download-button" class="secondary-button" type="button" disabled>Stáhnout SVG ↓</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>Family Tree Generator <span>·</span> Všechna data zůstávají v tomto prohlížeči.</footer>
+  <script src="script.js"></script>
+</body>
+</html>
