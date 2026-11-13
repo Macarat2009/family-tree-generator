@@ -1,4 +1,4 @@
-# Family Tree Generator – verze 0.1
+# Family Tree Generator
 
 ## Spuštění
 1. Rozbal ZIP archiv.
