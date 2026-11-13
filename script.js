@@ -30,7 +30,6 @@ const treeCanvas = document.querySelector("#tree-canvas");
 const downloadButton = document.querySelector("#download-button");
 const treeStatus = document.querySelector("#tree-status");
 
-let currentLayout = "vertical";
 let currentTheme = "dark";
 let currentSvg = "";
 
@@ -47,15 +46,15 @@ const themes = {
     line: "#626b78"
   },
   light: {
-    background: "#f4f2ed",
+    background: "#ffffff",
     card: "#ffffff",
-    selfCard: "#fff0e4",
-    border: "#d4d0c8",
-    selfBorder: "#c66b32",
-    title: "#a94f1e",
-    text: "#292722",
-    muted: "#77736b",
-    line: "#aaa49a"
+    selfCard: "#ffffff",
+    border: "#b8b8b8",
+    selfBorder: "#777777",
+    title: "#333333",
+    text: "#111111",
+    muted: "#555555",
+    line: "#777777"
   }
 };
 
@@ -121,40 +120,29 @@ function escapeXml(value) {
   })[char]);
 }
 
-function nodePosition(path, layout) {
+function nodePosition(path) {
   const depth = path.length;
   const index = depth === 0 ? 0 : parseInt(path, 2);
   const span = 2 ** (MAX_GENERATION - depth);
   const center = (index * span + span / 2) * SLOT_WIDTH;
 
-  if (layout === "vertical") {
-    return {
-      x: center - NODE_WIDTH / 2,
-      y: (MAX_GENERATION - depth) * LEVEL_GAP
-    };
-  }
-
   return {
-    x: (MAX_GENERATION - depth) * LEVEL_GAP,
-    y: center - NODE_HEIGHT / 2
+    x: center - NODE_WIDTH / 2,
+    y: (MAX_GENERATION - depth) * LEVEL_GAP
   };
 }
 
-function renderTree(data, layout, themeName) {
+function renderTree(data, themeName) {
   const theme = themes[themeName];
   const visiblePeople = getVisiblePeople(data);
   const positions = {};
 
   for (const person of visiblePeople) {
-    positions[person.path] = nodePosition(person.path, layout);
+    positions[person.path] = nodePosition(person.path);
   }
 
-  const width = layout === "vertical"
-    ? 2 ** MAX_GENERATION * SLOT_WIDTH
-    : (MAX_GENERATION + 1) * LEVEL_GAP + NODE_WIDTH;
-  const height = layout === "vertical"
-    ? (MAX_GENERATION + 1) * LEVEL_GAP
-    : 2 ** MAX_GENERATION * SLOT_WIDTH;
+  const width = 2 ** MAX_GENERATION * SLOT_WIDTH;
+  const height = (MAX_GENERATION + 1) * LEVEL_GAP;
 
   const lines = [];
   for (const person of visiblePeople) {
@@ -166,11 +154,7 @@ function renderTree(data, layout, themeName) {
     const parent = positions[parentPath];
     const ancestor = positions[person.path];
 
-    if (layout === "vertical") {
-      lines.push(`<path d="M ${parent.x + NODE_WIDTH / 2} ${parent.y} L ${ancestor.x + NODE_WIDTH / 2} ${ancestor.y + NODE_HEIGHT}" />`);
-    } else {
-      lines.push(`<path d="M ${parent.x + NODE_WIDTH} ${parent.y + NODE_HEIGHT / 2} L ${ancestor.x} ${ancestor.y + NODE_HEIGHT / 2}" />`);
-    }
+    lines.push(`<path d="M ${parent.x + NODE_WIDTH / 2} ${parent.y} L ${ancestor.x + NODE_WIDTH / 2} ${ancestor.y + NODE_HEIGHT}" />`);
   }
 
   const nodes = visiblePeople.map(person => {
@@ -211,7 +195,7 @@ function showTree() {
   }
 
   const visiblePeople = getVisiblePeople(data);
-  currentSvg = renderTree(data, currentLayout, currentTheme);
+  currentSvg = renderTree(data, currentTheme);
   treeCanvas.innerHTML = currentSvg;
   treeContainer.classList.toggle("theme-light", currentTheme === "light");
   treeContainer.classList.toggle("theme-dark", currentTheme === "dark");
@@ -236,18 +220,6 @@ form.addEventListener("reset", () => {
   emptyState.classList.remove("hidden");
   downloadButton.disabled = true;
   treeStatus.textContent = "Zatím nebyl vytvořen žádný rodokmen.";
-});
-
-document.querySelectorAll(".view-button[data-layout]").forEach(button => {
-  button.addEventListener("click", () => {
-    currentLayout = button.dataset.layout;
-    document.querySelectorAll(".view-button[data-layout]").forEach(item => {
-      const active = item === button;
-      item.classList.toggle("active", active);
-      item.setAttribute("aria-pressed", String(active));
-    });
-    if (currentSvg) showTree();
-  });
 });
 
 document.querySelectorAll(".view-button[data-theme]").forEach(button => {

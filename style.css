@@ -190,7 +190,7 @@ button:disabled { opacity: .4; cursor: not-allowed; }
   border: 1px solid var(--border);
   border-radius: 10px;
 }
-.tree-container.theme-light { background: #f4f2ed; border-color: #d8d3c9; }
+.tree-container.theme-light { background: #ffffff; border-color: #d8d8d8; }
 .tree-container.theme-dark { background: #121417; border-color: var(--border); }
 .tree-canvas { min-width: max-content; min-height: 250px; padding: 10px; }
 .tree-canvas svg { display: block; max-width: none; }
